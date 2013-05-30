@@ -27,6 +27,7 @@ public class WSSListener implements Runnable {
       
       t = new Thread( this, "SocketListener" );
       t.start();
+   
    }
    
    

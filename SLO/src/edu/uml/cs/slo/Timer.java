@@ -26,8 +26,26 @@ public class Timer implements Runnable {
 
         while (true) {
 
-            Vector<TimeMessagePair> ourVec = TimeMessagePairs.getPairs();
-            for (int i = 0; i < ourVec.size(); ++i) {
+            if (MusicTime.musicTime.getCurrentState()) {  // Our On/Off boolean
+
+                Vector<TimeMessagePair> ourVec = TimeMessagePairs.getPairs();
+                for (int i = 0; i < ourVec.size(); ++i) {
+
+                    if (beatFour <= System.currentTimeMillis() && (MusicTime.musicTime.getCurrentBeat() < 4)) {
+                        MusicTime.musicTime.setCurrentBeat(4);
+                    } else if (beatThree <= System.currentTimeMillis() && (MusicTime.musicTime.getCurrentBeat() < 3)) {
+                        MusicTime.musicTime.setCurrentBeat(3);
+                    } else if (beatTwo <= System.currentTimeMillis() && (MusicTime.musicTime.getCurrentBeat() < 2)) {
+                        MusicTime.musicTime.setCurrentBeat(2);
+                    }
+
+                    // if it's time, send the message and remove the timeMessagePair from the vector
+                    if (ourVec.get(i).getTime() <= System.currentTimeMillis()) {
+                        ourVec.get(i).sendMessage();
+                        ourVec.remove(i);
+                        --i;
+                    }
+                }
 
                 if (beatFour <= System.currentTimeMillis() && (MusicTime.musicTime.getCurrentBeat() < 4)) {
                     MusicTime.musicTime.setCurrentBeat(4);
@@ -37,30 +55,26 @@ public class Timer implements Runnable {
                     MusicTime.musicTime.setCurrentBeat(2);
                 }
 
-                // if it's time, send the message and remove the timeMessagePair from the vector
-                if (ourVec.get(i).getTime() <= System.currentTimeMillis()) {
-                    ourVec.get(i).sendMessage();
-                    ourVec.remove(i);
-                    --i;
+                // if we're past the next measure, advance the next measure
+                if (MusicTime.musicTime.getNextMeasure() <= System.currentTimeMillis()) {
+                    MusicTime.musicTime.advanceNextMeasure();
+                    MusicTime.musicTime.setCurrentMeasure(mNum++);
+                    MusicTime.musicTime.setCurrentBeat(1);
+                    beatTwo = beatLength + System.currentTimeMillis();
+                    beatThree = beatLength + beatTwo;
+                    beatFour = beatLength + beatThree;
                 }
-            }
-
-            if (beatFour <= System.currentTimeMillis() && (MusicTime.musicTime.getCurrentBeat() < 4)) {
-                MusicTime.musicTime.setCurrentBeat(4);
-            } else if (beatThree <= System.currentTimeMillis() && (MusicTime.musicTime.getCurrentBeat() < 3)) {
-                MusicTime.musicTime.setCurrentBeat(3);
-            } else if (beatTwo <= System.currentTimeMillis() && (MusicTime.musicTime.getCurrentBeat() < 2)) {
-                MusicTime.musicTime.setCurrentBeat(2);
-            }
-
-            // if we're past the next measure, advance the next measure
-            if (MusicTime.musicTime.getNextMeasure() <= System.currentTimeMillis()) {
-                MusicTime.musicTime.advanceNextMeasure();
-                MusicTime.musicTime.setCurrentMeasure(mNum++);
-                MusicTime.musicTime.setCurrentBeat(1);
-                beatTwo = beatLength + System.currentTimeMillis();
-                beatThree = beatLength + beatTwo;
-                beatFour = beatLength + beatThree;
+            } else {
+                if (MusicTime.musicTime.getCurrentBeat() != 1) {
+                    MusicTime.musicTime.setCurrentBeat(1);
+                    beatTwo = 0; 
+                    beatThree = 0; 
+                    beatFour = 0;
+                }
+                if (MusicTime.musicTime.getCurrentMeasure() != 1) {
+                    MusicTime.musicTime.setCurrentMeasure(1);
+                    mNum = 1;
+                }
             }
         }
         /*

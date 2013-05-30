@@ -34,6 +34,7 @@ public class MusicTime {
    private int currentMeasure = 0;
    private int currentBeat = 1;
    private int measureLength = 4;
+   private boolean currentState = false;
    
    public static MusicTime musicTime = new MusicTime( 60, new TimeSig(4,4) );
    
@@ -90,6 +91,14 @@ public class MusicTime {
         return currentMeasure;
     }
     
+    public boolean getCurrentState() {
+        return currentState;
+    }
+        
+    public void setCurrentState(boolean state) {
+        currentState = state;
+    }
+        
    public void setDisplays(javax.swing.JTextPane mDisplay, javax.swing.JTextPane bDisplay) {
      measureDisplay = mDisplay;
      beatDisplay = bDisplay;

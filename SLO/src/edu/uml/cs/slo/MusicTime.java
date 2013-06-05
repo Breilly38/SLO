@@ -67,7 +67,17 @@ public class MusicTime {
             tempoDisplay.setText("" + tempo + "");
        }
    }
-   public void setTimeSig( TimeSig ts) { this.timeSig = ts;  }
+   public void setTimeSig( TimeSig ts) { 
+       this.timeSig = ts;
+   }
+  
+   public TimeSig getTimeSig() {
+       return this.timeSig;
+   }
+   
+   public int getTimeNumerator() { 
+       return this.timeSig.getTimeNumerator(); 
+   }
    
    // returns beat length in milliseconds per beat
    public long beatLength() {
@@ -109,6 +119,6 @@ public class MusicTime {
      measureDisplay = mDisplay;
      beatDisplay = bDisplay;
      tempoDisplay = tDisplay;
-}
+   }
 }
 

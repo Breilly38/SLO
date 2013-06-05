@@ -20,25 +20,37 @@ public class Timer implements Runnable {
     }
 
     public void run() {
+        int numerator = MusicTime.musicTime.getTimeNumerator();
         int mNum = 1;
         long beatLength = MusicTime.musicTime.beatLength();
-        long beatTwo = 0, beatThree = 0, beatFour = 0;
+        long[] beats = new long[100];
+        for( int i = 0; i < 100; i++) {
+            beats[i] = 0;
+        }
+        //long beatTwo = 0, beatThree = 0, beatFour = 0;
 
         while (true) {
 
             if (MusicTime.musicTime.getCurrentState()) {  // Our On/Off boolean
                 beatLength = MusicTime.musicTime.beatLength();
+                numerator = MusicTime.musicTime.getTimeNumerator();
 
                 Vector<TimeMessagePair> ourVec = TimeMessagePairs.getPairs();
                 for (int i = 0; i < ourVec.size(); ++i) {
-
-                    if (beatFour <= System.currentTimeMillis() && (MusicTime.musicTime.getCurrentBeat() < 4)) {
-                        MusicTime.musicTime.setCurrentBeat(4);
-                    } else if (beatThree <= System.currentTimeMillis() && (MusicTime.musicTime.getCurrentBeat() < 3)) {
-                        MusicTime.musicTime.setCurrentBeat(3);
-                    } else if (beatTwo <= System.currentTimeMillis() && (MusicTime.musicTime.getCurrentBeat() < 2)) {
-                        MusicTime.musicTime.setCurrentBeat(2);
+                    
+                    for( int j = numerator - 1; j > 0; j-- ) {
+                        if( beats[j] <= System.currentTimeMillis() && (MusicTime.musicTime.getCurrentBeat() < j+1)) {
+                            MusicTime.musicTime.setCurrentBeat(j+1);
+                            break;
+                        }
                     }
+                    //if (beatFour <= System.currentTimeMillis() && (MusicTime.musicTime.getCurrentBeat() < 4)) {
+                    //    MusicTime.musicTime.setCurrentBeat(4);
+                    //} else if (beatThree <= System.currentTimeMillis() && (MusicTime.musicTime.getCurrentBeat() < 3)) {
+                    //    MusicTime.musicTime.setCurrentBeat(3);
+                    //} else if (beatTwo <= System.currentTimeMillis() && (MusicTime.musicTime.getCurrentBeat() < 2)) {
+                    //    MusicTime.musicTime.setCurrentBeat(2);
+                    //}
 
                     // if it's time, send the message and remove the timeMessagePair from the vector
                     if (ourVec.get(i).getTime() <= System.currentTimeMillis()) {
@@ -48,12 +60,11 @@ public class Timer implements Runnable {
                     }
                 }
 
-                if (beatFour <= System.currentTimeMillis() && (MusicTime.musicTime.getCurrentBeat() < 4)) {
-                    MusicTime.musicTime.setCurrentBeat(4);
-                } else if (beatThree <= System.currentTimeMillis() && (MusicTime.musicTime.getCurrentBeat() < 3)) {
-                    MusicTime.musicTime.setCurrentBeat(3);
-                } else if (beatTwo <= System.currentTimeMillis() && (MusicTime.musicTime.getCurrentBeat() < 2)) {
-                    MusicTime.musicTime.setCurrentBeat(2);
+                for( int j = numerator - 1; j > 0; j-- ) {
+                    if( beats[j] <= System.currentTimeMillis() && (MusicTime.musicTime.getCurrentBeat() < j+1)) {
+                        MusicTime.musicTime.setCurrentBeat(j+1);
+                        break;
+                    }
                 }
 
                 // if we're past the next measure, advance the next measure
@@ -61,16 +72,20 @@ public class Timer implements Runnable {
                     MusicTime.musicTime.advanceNextMeasure();
                     MusicTime.musicTime.setCurrentMeasure(mNum++);
                     MusicTime.musicTime.setCurrentBeat(1);
-                    beatTwo = beatLength + System.currentTimeMillis();
-                    beatThree = beatLength + beatTwo;
-                    beatFour = beatLength + beatThree;
+                    beats[1] = beatLength + System.currentTimeMillis();
+                    for( int j = 2; j < numerator; j++ ) {
+                        beats[j] = beats[j-1] + beatLength;
+                    }
+                    //beatTwo = beatLength + System.currentTimeMillis();
+                    //beatThree = beatLength + beatTwo;
+                    //beatFour = beatLength + beatThree;
                 }
             } else {
                 if (MusicTime.musicTime.getCurrentBeat() != 1) {
                     MusicTime.musicTime.setCurrentBeat(1);
-                    beatTwo = 0; 
-                    beatThree = 0; 
-                    beatFour = 0;
+                    for( int j = 1; j < numerator; j++ ) {
+                        beats[j] = 0;
+                    }
                 }
                 if (MusicTime.musicTime.getCurrentMeasure() != 1) {
                     MusicTime.musicTime.setCurrentMeasure(1);

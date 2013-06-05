@@ -29,8 +29,9 @@ public class MusicTime {
    private int tempo;          // in bpm
    private TimeSig timeSig;    // time signiture
    private long nextMeasure;   // system time in millis of next measure
-   private javax.swing.JTextPane measureDisplay = null;
-   private javax.swing.JTextPane beatDisplay = null;
+   private javax.swing.JTextField measureDisplay = null;
+   private javax.swing.JTextField beatDisplay = null;
+   private javax.swing.JTextField tempoDisplay = null;
    private int currentMeasure = 0;
    private int currentBeat = 1;
    private int measureLength = 4;
@@ -60,7 +61,12 @@ public class MusicTime {
    public long getNextMeasure() { return nextMeasure; }
    public int getTempo()        { return tempo; }
    
-   public void setTempo( int tempo )   { this.tempo = tempo; }
+   public void setTempo( int tempo )   { 
+       this.tempo = tempo; 
+       if (tempoDisplay != null) {
+            tempoDisplay.setText("" + tempo + "");
+       }
+   }
    public void setTimeSig( TimeSig ts) { this.timeSig = ts;  }
    
    // returns beat length in milliseconds per beat
@@ -99,9 +105,10 @@ public class MusicTime {
         currentState = state;
     }
         
-   public void setDisplays(javax.swing.JTextPane mDisplay, javax.swing.JTextPane bDisplay) {
+   public void setDisplays(javax.swing.JTextField mDisplay, javax.swing.JTextField bDisplay, javax.swing.JTextField tDisplay) {
      measureDisplay = mDisplay;
      beatDisplay = bDisplay;
+     tempoDisplay = tDisplay;
 }
 }
 

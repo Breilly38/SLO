@@ -27,6 +27,7 @@ public class Timer implements Runnable {
         while (true) {
 
             if (MusicTime.musicTime.getCurrentState()) {  // Our On/Off boolean
+                beatLength = MusicTime.musicTime.beatLength();
 
                 Vector<TimeMessagePair> ourVec = TimeMessagePairs.getPairs();
                 for (int i = 0; i < ourVec.size(); ++i) {

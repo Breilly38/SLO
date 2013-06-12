@@ -32,8 +32,7 @@ public class Timer implements Runnable {
         while (true) {
 
             if (MusicTime.musicTime.getCurrentState()) {  // Our On/Off boolean
-                beatLength = MusicTime.musicTime.beatLength();
-                numerator = MusicTime.musicTime.getTimeNumerator();
+                beatLength = MusicTime.musicTime.beatLength();               
 
                 Vector<TimeMessagePair> ourVec = TimeMessagePairs.getPairs();
                 for (int i = 0; i < ourVec.size(); ++i) {
@@ -72,6 +71,7 @@ public class Timer implements Runnable {
                     MusicTime.musicTime.advanceNextMeasure();
                     MusicTime.musicTime.setCurrentMeasure(mNum++);
                     MusicTime.musicTime.setCurrentBeat(1);
+                    numerator = MusicTime.musicTime.getTimeNumerator();
                     beats[1] = beatLength + System.currentTimeMillis();
                     for( int j = 2; j < numerator; j++ ) {
                         beats[j] = beats[j-1] + beatLength;

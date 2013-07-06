@@ -25,9 +25,9 @@ public class Console implements Runnable {
       t = new Thread(this, "Console Thread");
       t.start();
    }
-
+   
    public void run() {
-
+            
       while (true) {
          String consoleCmd = getIn();
 

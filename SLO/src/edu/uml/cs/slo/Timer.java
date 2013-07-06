@@ -30,7 +30,7 @@ public class Timer implements Runnable {
         //long beatTwo = 0, beatThree = 0, beatFour = 0;
 
         while (true) {
-
+            
             if (MusicTime.musicTime.getCurrentState()) {  // Our On/Off boolean
                 beatLength = MusicTime.musicTime.beatLength();               
 

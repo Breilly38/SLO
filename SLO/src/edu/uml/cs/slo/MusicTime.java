@@ -32,7 +32,6 @@ public class MusicTime {
    private javax.swing.JTextField measureDisplay = null;
    private javax.swing.JTextField beatDisplay = null;
    private javax.swing.JTextField tempoDisplay = null;
-   private javax.swing.JTextArea messagesArea = null;
    private int currentMeasure = 0;
    private int currentBeat = 1;
    private int measureLength = 4;
@@ -46,7 +45,7 @@ public class MusicTime {
       nextMeasure = nextMeasureFromTime( System.currentTimeMillis() );
    }
    
-       public static MusicTime getInstance() {
+    public static MusicTime getInstance() {
         return musicTime;
     }
    
@@ -115,13 +114,12 @@ public class MusicTime {
     public void setCurrentState(boolean state) {
         currentState = state;
     }
+    
         
-   public void setDisplays(javax.swing.JTextField mDisplay, javax.swing.JTextField bDisplay, javax.swing.JTextField tDisplay,
-           javax.swing.JTextArea mArea) {
+   public void setDisplays(javax.swing.JTextField mDisplay, javax.swing.JTextField bDisplay, javax.swing.JTextField tDisplay) {
      measureDisplay = mDisplay;
      beatDisplay = bDisplay;
      tempoDisplay = tDisplay;
-     messagesArea = mArea;
    }
 }
 

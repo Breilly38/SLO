@@ -87,7 +87,7 @@ public class Timer implements Runnable {
                         beats[j] = 0;
                     }
                 }
-                if (MusicTime.musicTime.getCurrentMeasure() != 1) {
+                if ((MusicTime.musicTime.getCurrentMeasure()) != 1) {
                     MusicTime.musicTime.setCurrentMeasure(1);
                     mNum = 1;
                 }

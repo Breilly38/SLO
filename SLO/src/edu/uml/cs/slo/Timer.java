@@ -72,6 +72,7 @@ public class Timer implements Runnable {
                     MusicTime.musicTime.setCurrentMeasure(mNum++);
                     MusicTime.musicTime.setCurrentBeat(1);
                     numerator = MusicTime.musicTime.getTimeNumerator();
+                    
                     beats[1] = beatLength + System.currentTimeMillis();
                     for( int j = 2; j < numerator; j++ ) {
                         beats[j] = beats[j-1] + beatLength;
@@ -83,13 +84,15 @@ public class Timer implements Runnable {
             } else {
                 if (MusicTime.musicTime.getCurrentBeat() != 1) {
                     MusicTime.musicTime.setCurrentBeat(1);
-                    for( int j = 1; j < numerator; j++ ) {
+                    
+                    for( int j = 0; j < numerator; j++ ) {
                         beats[j] = 0;
                     }
                 }
                 if ((MusicTime.musicTime.getCurrentMeasure()) != 1) {
-                    MusicTime.musicTime.setCurrentMeasure(1);
-                    mNum = 1;
+                   mNum = 1; 
+                   MusicTime.musicTime.setCurrentMeasure(1);
+                    
                 }
             }
         }

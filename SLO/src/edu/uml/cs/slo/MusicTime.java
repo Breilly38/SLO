@@ -54,6 +54,10 @@ public class MusicTime {
       return someTime + (mspb * timeSig.getTimeNumerator() ) ;
    }
    
+   public void clearMeasure() {
+      nextMeasure = nextMeasureFromTime( System.currentTimeMillis() ); 
+   }
+   
    public void advanceNextMeasure() {
       nextMeasure = nextMeasureFromTime( nextMeasure ); 
    }

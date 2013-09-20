@@ -2,7 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package edu.uml.cs.websock;
+package edu.uml.cs.connect;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -12,12 +12,12 @@ import java.net.Socket;
  *
  * @author mattvaughan
  */
-public class WSSListener implements Runnable {
+public class SockListener implements Runnable {
       
    private Thread t;
    private ServerSocket serverSocket;
    
-   public WSSListener () {
+   public SockListener () {
       try {
          serverSocket = new ServerSocket( 40111 );
       }
@@ -47,7 +47,7 @@ public class WSSListener implements Runnable {
       
       
          if ( clientSocket != null ) {
-            new WSSClientConnection(clientSocket);
+            new ClientConnection(clientSocket);
          }
       } // end while
    }

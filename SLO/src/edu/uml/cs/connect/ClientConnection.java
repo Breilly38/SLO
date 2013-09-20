@@ -6,7 +6,7 @@
  */
 
 
-package edu.uml.cs.websock;
+package edu.uml.cs.connect;
 
 import java.io.*;
 import java.net.Socket;
@@ -22,21 +22,48 @@ import edu.uml.cs.slo.Interpreter;
  *
  * @author mattvaughan
  */
-public class WSSClientConnection implements Runnable {
+public class ClientConnection implements Runnable {
 
    public static boolean DEBUG = false; // should we print debug output?
 
    private Thread t;
    private Socket client;
 
-   public WSSClientConnection(Socket cs) {
+   public ClientConnection(Socket cs) {
 
       client = cs;
 
       t = new Thread(this, "Client: " + client.toString() );
       t.start();
    }
+   
+   public void run() {
+      
+      try { 
+         BufferedReader in          = new BufferedReader(new InputStreamReader(client.getInputStream()));
+         
+         // get input from socket forever...
+         while ( true ) {
+            
+            String message = in.readLine();
+            
+            System.out.println(message);
+            
+            // invoke the interpreter
+            String value = Interpreter.getInstance().interp(message, t.getName() );
+            System.out.println("Evaluated to " + value);
 
+         }
+         
+      } catch (Exception e) {
+         System.err.println("There was an exception in ClientConnection.run().\nFailing\n");
+         System.exit(1);
+      }
+      
+   }
+   
+/* OLD WEBSOCKET VERSION
+ * 
    public void run() {
 
       try {
@@ -141,4 +168,6 @@ public class WSSClientConnection implements Runnable {
       out.print(reply);
       out.flush();
    } 
+   
+   */
 }

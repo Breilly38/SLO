@@ -4,7 +4,7 @@
  */
 package edu.uml.cs.slo;
 
-import edu.uml.cs.websock.WSSListener;
+import edu.uml.cs.connect.SockListener;
 
 /**
  *
@@ -24,7 +24,7 @@ public class JFrameGUI extends javax.swing.JFrame {
         new Timer();         // Timer thread...
         new Console();       // Console thread...
 
-        new WSSListener();   // Our Server thread... 
+        new SockListener();   // Our Server thread... 
     }
 
     /**

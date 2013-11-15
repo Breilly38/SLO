@@ -40,7 +40,7 @@ public class ClientConnection implements Runnable {
    public void run() {
       
       try { 
-         BufferedReader in          = new BufferedReader(new InputStreamReader(client.getInputStream()));
+         BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
          
          // get input from socket forever...
          while ( true ) {

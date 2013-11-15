@@ -8,6 +8,7 @@ import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
+import javax.sound.midi.*;
 
 /**
  * 
@@ -17,6 +18,7 @@ public class TimeMessagePair {
       
    private long timeInMillis;             // time to send this message
    private ShortMessage midiMessage;      // midi message
+   private Receiver rcvr;
    
    public TimeMessagePair( long timeInMillis, int message, int channel, int noteNumber, int velocity ) {
       
@@ -25,6 +27,7 @@ public class TimeMessagePair {
       
       try {
          midiMessage.setMessage(message, channel, noteNumber, velocity);
+         System.out.println(channel);
       } catch (InvalidMidiDataException ex) {
          System.err.println("TimeMessagePair.TimeMessagePair: Error making message");
       } catch ( Exception e ) {
@@ -35,10 +38,8 @@ public class TimeMessagePair {
    public long getTime()         { return timeInMillis; }
    
    public void sendMessage() {
-      
-      // the midi receiver to which we will send our message
-      Receiver rcvr = OurReceiver.getInstance().getReceiver();
-      
+     
+      rcvr = OurReceiver.getInstance().getReceiver();
       sendMessage( rcvr );
    }
    
@@ -53,23 +54,3 @@ public class TimeMessagePair {
    }
 }
 
-class OurReceiver {
-   
-   // singleton pattern
-   private static OurReceiver ourReceiver    = new OurReceiver();
-   public static OurReceiver getInstance()   { return ourReceiver; }
-   
-   private Receiver rcvr;
-   
-   private OurReceiver() {
-      try {
-         rcvr = MidiSystem.getReceiver();
-      } catch (Exception e) {
-         System.err.println("OurReceiver.OurReceiver - Error getting receiver");
-         System.exit(1);
-      }
-   }
-   
-   // getter
-   public Receiver getReceiver() { return rcvr; }
-}

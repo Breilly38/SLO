@@ -25,14 +25,15 @@ import edu.uml.cs.slo.Interpreter;
 public class ClientConnection implements Runnable {
 
    public static boolean DEBUG = false; // should we print debug output?
-
+  
+   
    private Thread t;
-   private Socket client;
-
+   private Socket client; 
+   
    public ClientConnection(Socket cs) {
 
       client = cs;
-
+      
       t = new Thread(this, "Client: " + client.toString() );
       t.start();
    }
@@ -56,8 +57,9 @@ public class ClientConnection implements Runnable {
          }
          
       } catch (Exception e) {
-         System.err.println("There was an exception in ClientConnection.run().\nFailing\n");
-         System.exit(1);
+         System.err.println("There was an exception in ClientConnection.run()");
+         System.err.println("Someone probably disconnected");
+         //System.exit(1);
       }
       
    }

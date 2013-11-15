@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
+import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
 
 /**
@@ -176,9 +177,15 @@ public class CoreFunctions {
             return myChannel( args, caller );
          }
       });
+      coreFunctionMap.put("changeInst", new Command() {
+         @Override
+         public Expression invoke( List<Expression> args, String caller ) {
+            return changeInstrument( args, caller );
+         }
+      });
    }
    
-   // (noteOn time channel noteNumber velocity
+   // (noteOn time channel noteNumber velocity)
    private Expression noteOn(List<Expression> args, String caller) {
       
       // check to make sure we got the right number of arguments
@@ -592,5 +599,32 @@ public class CoreFunctions {
    private Expression myChannel( List<Expression> args, String caller ) {
       
       return new Value( new Integer (ChannelMaster.channelMaster.getChannel(caller)).toString() );
+   }
+   
+   private Expression changeInstrument( List<Expression> args, String caller ) {
+      
+      int channel = ChannelMaster.channelMaster.getChannel(caller);
+      Receiver rcvr = OurReceiver.getInstance().getReceiver();
+      ShortMessage instrumentChange = new ShortMessage();
+
+      if ( args.size() != 1 ) {
+         System.err.println("(changeInst) expected one argument");
+         return new Void();
+      }
+      if ( args.get(0).eval(defSubst, caller).getType().compareTo("integer") != 0 ) {
+         System.err.println("(changeInst) expected an integer as sole argument");
+         return new Void();
+      }
+      
+      int instr = new Integer( args.get(0).show(defSubst, caller) ).intValue();
+      
+      try {
+         instrumentChange.setMessage(ShortMessage.PROGRAM_CHANGE, channel, instr,0);
+         rcvr.send(instrumentChange, -1);
+      }
+      catch (Exception e) {
+         System.err.println("Error in (changeInstr), CoreFunctions.changeInstrument()");
+      }
+      return new Void();
    }
 }

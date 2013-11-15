@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+// NOTE TO SELF - Drums are on MIDI channel 10
 package edu.uml.cs.slo;
 
 import java.util.HashMap;

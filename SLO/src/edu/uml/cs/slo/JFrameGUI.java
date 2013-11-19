@@ -350,6 +350,7 @@ public class JFrameGUI extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         musicTime.setCurrentState(false);        
+        musicTime.setFirstMeasure(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void numTimeDisplayFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_numTimeDisplayFocusLost

@@ -587,12 +587,12 @@ public class CoreFunctions {
    }
    
    private Expression nextMeasure( List<Expression> args, String caller ) {
-      Long timeFromNow = new Long (MusicTime.musicTime.getNextMeasure() - System.currentTimeMillis());
+      Long timeFromNow = new Long (MusicTime.score.getNextMeasure() - System.currentTimeMillis());
       return new Value( timeFromNow.toString() );
    }
 
    private Expression beat( List<Expression> args, String caller ) {
-      Long beatLength = new Long( MusicTime.musicTime.beatLength() );
+      Long beatLength = new Long( MusicTime.score.beatLength() );
       return new Value( beatLength.toString() );
    }
    

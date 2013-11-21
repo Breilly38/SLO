@@ -4,6 +4,7 @@
  */
 package edu.uml.cs.slo;
 
+import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -34,43 +35,33 @@ public class Timer implements Runnable {
                 // First measure through gets beat values
                 // Has to be here instead of in init because of time dependency
                 if(MusicTime.score.isFirstMeasure()) {
-                    
                     MusicTime.score.setBeats(numerator, MusicTime.score.beatLength(), System.currentTimeMillis());
-                    
                     MusicTime.score.setFirstMeasure(false);
                 }
                 
-                Vector<TimeMessagePair> ourVec = TimeMessagePairs.getPairs();
-                for (int i = 0; i < ourVec.size(); ++i) {
-                    
-                    for( int j = numerator - 1; j > 0; j-- ) {
-                        if( (MusicTime.score.getBeat(j) <= System.currentTimeMillis()) && (MusicTime.score.getCurrentBeat() < j+1)) {
-                            MusicTime.score.setCurrentBeat(j+1);
-                            break;
-                        }
-                    }
-                    //if (beatFour <= System.currentTimeMillis() && (MusicTime.score.getCurrentBeat() < 4)) {
-                    //    MusicTime.score.setCurrentBeat(4);
-                    //} else if (beatThree <= System.currentTimeMillis() && (MusicTime.score.getCurrentBeat() < 3)) {
-                    //    MusicTime.score.setCurrentBeat(3);
-                    //} else if (beatTwo <= System.currentTimeMillis() && (MusicTime.score.getCurrentBeat() < 2)) {
-                    //    MusicTime.score.setCurrentBeat(2);
-                    //}
-
-                    // if it's time, send the message and remove the timeMessagePair from the vector
-                    if (ourVec.get(i).getTime() <= System.currentTimeMillis()) {
-                        ourVec.get(i).sendMessage();
-                        ourVec.remove(i);
-                        --i;
-                    }
-                }
-
+                // Numerator and denominator stuff for the GUI
                 for( int j = numerator - 1; j > 0; j-- ) {
-                    if( (MusicTime.score.getBeat(j) <= System.currentTimeMillis()) && (MusicTime.score.getCurrentBeat() < j+1)) {
+                     if( (MusicTime.score.getBeat(j) <= System.currentTimeMillis()) && (MusicTime.score.getCurrentBeat() < j+1)) {
                         MusicTime.score.setCurrentBeat(j+1);
-                        break;
-                    }
+                     break;
+                  }
                 }
+                
+                // This is where we play the notes (if it's time)
+                // The other synchronized() is in TimeMessagePairs. 
+                // We don't want to change the vector while it's being iterated...
+                // note... this part of the loop is linear on the number of elements in the vector
+                synchronized ( TimeMessagePairs.TimeVecLock ) {
+                  Iterator<TimeMessagePair> it = TimeMessagePairs.getPairs().iterator();
+                  while ( it.hasNext() ) {
+
+                    TimeMessagePair timeMsg = it.next();
+                    if ( System.currentTimeMillis() >= timeMsg.getTime() ) {
+                       timeMsg.sendMessage();
+                       it.remove();
+                    }  
+                  } // end while
+                } // end synchronized()
 
                 // if we're past the next measure, advance the next measure
                 if (MusicTime.score.getNextMeasure() <= System.currentTimeMillis()) {
@@ -95,21 +86,7 @@ public class Timer implements Runnable {
                    MusicTime.score.setCurrentMeasure(1);
                     
                 }
-            }
-        }
-        /*
-         * Alas, ConcurrentModificationExceptions are unfriendly with iterators 
-         * while (true) { 
-         * // lets get an iterator 
-         * Iterator<TimeMessagePair> it =
-         * TimeMessagePairs.getPairs().iterator();
-         *
-         * // for each message, check the time while (it.hasNext()) {
-         *
-         * TimeMessagePair timeMsg = it.next();
-         *
-         * // if the time is right send the message if (timeMsg.getTime() <=
-         * System.currentTimeMillis()) { timeMsg.sendMessage(); it.remove(); } } }
-         */
-    }
+            } // end else
+        } // end while(true)
+    } // end run()
 }

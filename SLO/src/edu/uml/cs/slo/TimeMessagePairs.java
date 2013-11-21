@@ -12,14 +12,19 @@ import java.util.Vector;
  */
 public class TimeMessagePairs {
    
+   public static Object TimeVecLock = new Object();
+   
    private static Vector<TimeMessagePair> pairs = new Vector<TimeMessagePair>();
    
    // a getter... for good messure
    public static Vector<TimeMessagePair> getPairs() { return pairs; }
    
    // synchronized... one at a time please
-   synchronized public static void addPair( TimeMessagePair newPair ) {
+   public static void addPair( TimeMessagePair newPair ) {
+      
+      synchronized ( TimeVecLock ) {
       pairs.addElement( newPair );
+      }
    }
    
    // We only need one instance of time message pair

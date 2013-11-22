@@ -19,8 +19,6 @@ public class Timer implements Runnable {
         t = new Thread(this, "Timing Thread");
         t.start();
     }
-
-
     
     public void run() {
         int mNum = 1;

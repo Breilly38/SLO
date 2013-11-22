@@ -27,13 +27,22 @@ public class Console implements Runnable {
    }
    
    public void run() {
-            
+
+      //used to test instruments can be removed after matts working version is pushed to gihub
+      String inst = "Guitar";
+      //System.out.println("HERE");
+      OurReceiver.setInstrument(inst);    
+      
+      
       while (true) {
          String consoleCmd = getIn();
 
          String value = Interpreter.getInstance().interp( consoleCmd, "Server Console" );
          
          System.out.println("Evaluates to: " + value );
+         
+         //testing receiver remove if statement later
+         
          /*
          long msgTime = System.currentTimeMillis()
                  + (1000 * new Integer(consoleCmd.split(",")[0]).intValue());

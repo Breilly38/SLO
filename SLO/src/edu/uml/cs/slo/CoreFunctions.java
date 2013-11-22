@@ -183,6 +183,12 @@ public class CoreFunctions {
             return changeInstrument( args, caller );
          }
       });
+      coreFunctionMap.put("drumMode", new Command() {
+         @Override
+         public Expression invoke( List<Expression> args, String caller ) {
+            return drumMode( args, caller );
+         }
+      });
    }
    
    // (noteOn time channel noteNumber velocity)
@@ -625,6 +631,30 @@ public class CoreFunctions {
       catch (Exception e) {
          System.err.println("Error in (changeInstr), CoreFunctions.changeInstrument()");
       }
+      return new Void();
+   }
+   
+   private Expression drumMode( List<Expression> args, String caller ) {
+      
+      if ( args.size() != 1 ) {
+         System.err.println("(drumMode) expected one argument");
+         return new Void();
+      }
+      
+      if ( args.get(0).eval(defSubst, caller).getType().compareTo("boolean") != 0 ) {
+         System.err.println("(drumMode) expected a boolean as sole argument");
+         return new Void();
+      }
+      
+      boolean drumMode = false;
+      if ( args.get(0).show(defSubst, caller).contentEquals("#t") ) drumMode = true;
+
+      try {
+         ChannelMaster.channelMaster.setDrumMode(caller, drumMode);
+      } catch (Exception e) {
+         System.err.println("CoreFunctions.drumMode(): Could not set drum mode for caller " + caller + " to " + drumMode);
+      }
+      
       return new Void();
    }
 }

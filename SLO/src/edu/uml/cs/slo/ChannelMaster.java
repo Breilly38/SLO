@@ -14,7 +14,7 @@ public class ChannelMaster {
    
    private int firstAvailable;
    
-   private Map<String,Integer> chanMap = new HashMap<String,Integer>();
+   private Map<String,currentChannel> chanMap = new HashMap<String,currentChannel>();
    private ChannelMaster() {
       firstAvailable = 1;
    }
@@ -22,11 +22,33 @@ public class ChannelMaster {
    synchronized public int getChannel( String caller ) {
       
       if ( chanMap.containsKey(caller) ) {
-         return chanMap.get(caller);
+         return chanMap.get(caller).getCurrentChannel();
       } else {
-         chanMap.put(caller, firstAvailable);
+         chanMap.put(caller, new currentChannel(firstAvailable) );
          firstAvailable++;
-         return chanMap.get(caller);
+         return chanMap.get(caller).getCurrentChannel();
       }
+   }
+   
+   public void setDrumMode( String caller, boolean drumMode ) throws Exception {
+      if ( chanMap.containsKey(caller) ) {
+         chanMap.get(caller).setDrumMode(drumMode);
+      } else {
+         throw new Exception("Key for caller: " + caller + " is not in HashMap");
+      }
+   }
+}
+
+class currentChannel {
+   private int channel;
+   private boolean drumMode;
+   
+   public currentChannel( int ch ) { channel = ch; drumMode = false; }
+   
+   public void setDrumMode( boolean dm )  { drumMode = dm; }
+   
+   public int getCurrentChannel() {
+      if ( drumMode ) return 10;
+      else return channel;
    }
 }

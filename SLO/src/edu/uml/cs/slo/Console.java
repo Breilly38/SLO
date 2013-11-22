@@ -22,16 +22,18 @@ public class Console implements Runnable {
 
       bufferRead = new BufferedReader(new InputStreamReader(System.in));
 
-      t = new Thread(this, "Console Thread");
+      t = new Thread(this, "Server Console Thread");
       t.start();
    }
    
    public void run() {
             
+      ChannelMaster.channelMaster.getChannel(t.getName()); // get our midi channel
+      
       while (true) {
          String consoleCmd = getIn();
 
-         String value = Interpreter.getInstance().interp( consoleCmd, "Server Console" );
+         String value = Interpreter.getInstance().interp( consoleCmd, t.getName() );
          
          System.out.println("Evaluates to: " + value );
          /*

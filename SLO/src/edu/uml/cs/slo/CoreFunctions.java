@@ -51,6 +51,18 @@ public class CoreFunctions {
       // default it the global environment
       defSubst = DeferredSubst.getInstance();
       
+      coreFunctionMap.put("drumOn", new Command() {
+         @Override
+         public Expression invoke( List<Expression> args, String caller ) {
+            return noteOn( args, caller );
+         }
+      });
+      coreFunctionMap.put("drumOff", new Command() {
+         @Override
+         public Expression invoke( List<Expression> args, String caller ) {
+            return noteOff( args, caller );
+         }
+      });
       coreFunctionMap.put("noteOn", new Command() {
          @Override
          public Expression invoke( List<Expression> args, String caller ) {
@@ -183,12 +195,51 @@ public class CoreFunctions {
             return changeInstrument( args, caller );
          }
       });
-      coreFunctionMap.put("drumMode", new Command() {
-         @Override
-         public Expression invoke( List<Expression> args, String caller ) {
-            return drumMode( args, caller );
-         }
-      });
+   }
+   
+   // (drumOn time noteNumber velocity)
+   private Expression drumOn(List<Expression> args, String caller ) {
+      // check to make sure we got the right number of arguments
+      if ( args.size() != 3 ) {
+         System.err.println("drumOn expected 3 arguments and got " + args.size() );
+         return new Void();
+      } 
+      
+      long msgTime = System.currentTimeMillis() + new Double( args.get(0).show(defSubst, caller) ).longValue();
+      int message = ShortMessage.NOTE_ON;
+      int noteNumber = new Integer( args.get(1).show(defSubst, caller) ).intValue();
+      int velocity   = new Integer( args.get(2).show(defSubst, caller) ).intValue();
+      
+      if ( Interpreter.DEBUG ) {
+         System.out.println(msgTime + "," + message + "," + noteNumber + "," + velocity);
+      }
+      
+      TimeMessagePair newPair = new TimeMessagePair(msgTime, message, 10, noteNumber, velocity);
+      TimeMessagePairs.addPair(newPair);
+      
+      return new Void();
+   }
+   
+   // (drumOff time noteNumber)
+   private Expression drumOff(List<Expression> args, String caller ) {
+      // check to make sure we got the right number of arguments
+      if ( args.size() != 2 ) {
+         System.err.println("drumOff expected 2 arguments and got " + args.size() );
+         return new Void();
+      } 
+      
+      long msgTime = System.currentTimeMillis() + new Double( args.get(0).show(defSubst, caller) ).longValue();
+      int message = ShortMessage.NOTE_OFF;
+      int noteNumber = new Integer( args.get(1).show(defSubst, caller) ).intValue();
+      
+      if ( Interpreter.DEBUG ) {
+         System.out.println(msgTime + "," + message + "," + noteNumber + "," + 60);
+      }
+      
+      TimeMessagePair newPair = new TimeMessagePair(msgTime, message, 10, noteNumber, 60);
+      TimeMessagePairs.addPair(newPair);
+      
+      return new Void();
    }
    
    // (noteOn time channel noteNumber velocity)
@@ -634,6 +685,8 @@ public class CoreFunctions {
       return new Void();
    }
    
+   
+   /* OLD DEPRECATED
    private Expression drumMode( List<Expression> args, String caller ) {
       
       if ( args.size() != 1 ) {
@@ -656,5 +709,5 @@ public class CoreFunctions {
       }
       
       return new Void();
-   }
+   } */
 }

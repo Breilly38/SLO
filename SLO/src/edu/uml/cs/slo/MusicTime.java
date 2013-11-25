@@ -36,7 +36,7 @@ class TimeSig {
  * @author mattvaughan
  */
 public class MusicTime {
-
+   
     private int tempo;          // in bpm
     private TimeSig timeSig;    // time signiture
     private long nextMeasure;   // system time in millis of next measure
@@ -49,6 +49,9 @@ public class MusicTime {
     private boolean currentState = false;
     private boolean measureState = true;
     private long[] beats = new long[100];
+    
+    
+    // singleton instance of musicTime
     public static MusicTime score = new MusicTime(60, new TimeSig(4, 4));
 
 

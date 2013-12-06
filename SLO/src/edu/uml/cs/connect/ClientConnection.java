@@ -42,18 +42,25 @@ public class ClientConnection implements Runnable {
       
       try { 
          BufferedReader in          = new BufferedReader(new InputStreamReader(client.getInputStream()));
+         PrintWriter out            = new PrintWriter(client.getOutputStream(), true);
          
          // get input from socket forever...
          while ( true ) {
+           
+            // if we have input, get the input and execute the statement
+            //if ( in.ready() ) {
+               String message = in.readLine();
+               // print the input
+               System.out.println(message);
+               // invoke the interpreter
+               String value = Interpreter.getInstance().interp(message, t.getName() );
+               System.out.println("Evaluated to " + value);
+            //}
+            // otherwise, send some info back
+            //else {
+            //   out.println("--DATA GOES HERE--");
+            //}
             
-            String message = in.readLine();
-            
-            System.out.println(message);
-            
-            // invoke the interpreter
-            String value = Interpreter.getInstance().interp(message, t.getName() );
-            System.out.println("Evaluated to " + value);
-
          }
          
       } catch (Exception e) {

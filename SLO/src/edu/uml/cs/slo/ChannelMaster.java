@@ -13,7 +13,7 @@ public class ChannelMaster {
    public static ChannelMaster channelMaster = new ChannelMaster();
    
    private int firstAvailable;
-   
+
    private Map<String,Integer> chanMap = new HashMap<String,Integer>();
    private ChannelMaster() {
       firstAvailable = 1;
@@ -29,7 +29,7 @@ public class ChannelMaster {
          return chanMap.get(caller).intValue();
       }
    }
-   
+
 /*   public void setDrumMode( String caller, boolean drumMode ) throws Exception {
       if ( chanMap.containsKey(caller) ) {
          chanMap.get(caller).setDrumMode(drumMode);

@@ -195,6 +195,31 @@ public class CoreFunctions {
             return changeInstrument( args, caller );
          }
       });
+      coreFunctionMap.put("Pan", new Command() {
+         @Override
+         public Expression invoke( List<Expression> args, String caller ) {
+            return Pan( args, caller );
+         }
+      });
+   }
+   
+   private Expression Pan(List<Expression> args, String caller ) {
+       
+       if (args.size() != 2) {
+           System.err.println("Pan expected 2 arguments and got " + args.size());
+           return new Void();
+       }
+       
+       final int PAN_CONTROLLER = 10;
+       int panValue = new Integer(args.get(0).show(defSubst, caller)).intValue();
+       long msgTime = System.currentTimeMillis() + new Double( args.get(0).show(defSubst, caller) ).longValue();
+       int channel =  new Integer( args.get(1).show(defSubst, caller) ).intValue();
+       int message = ShortMessage.CONTROL_CHANGE;
+       
+       TimeMessagePair newPair = new TimeMessagePair(msgTime, message, channel, PAN_CONTROLLER, panValue );
+       TimeMessagePairs.addPair(newPair);
+      
+       return new Void();
    }
    
    // (drumOn time noteNumber velocity)
@@ -256,7 +281,7 @@ public class CoreFunctions {
       int channel    = new Integer( args.get(1).show(defSubst, caller) ).intValue();
       int noteNumber = new Integer( args.get(2).show(defSubst, caller) ).intValue();
       int velocity   = new Integer( args.get(3).show(defSubst, caller) ).intValue();
-
+      
       if ( Interpreter.DEBUG ) {
          System.out.println(msgTime + "," + message + "," + channel + "," + noteNumber + "," + velocity);
       }

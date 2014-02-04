@@ -46,7 +46,7 @@
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
-    <Property name="title" type="java.lang.String" value="UMass Lowell Snap! Laptop Orchestra"/>
+    <Property name="title" type="java.lang.String" value="UMass Lowell Scratch Laptop Orchestra"/>
     <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>

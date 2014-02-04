@@ -73,7 +73,7 @@ public class JFrameGUI extends javax.swing.JFrame {
         jScrollPane1.setViewportView(jTextArea2);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("UMass Lowell Snap! Laptop Orchestra");
+        setTitle("UMass Lowell Scratch Laptop Orchestra");
         setResizable(false);
 
         jButtonStart.setText("Start");
@@ -254,7 +254,7 @@ public class JFrameGUI extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(denTimeDisplay))
+                .addComponent(denTimeDisplay, javax.swing.GroupLayout.DEFAULT_SIZE, 51, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -270,7 +270,7 @@ public class JFrameGUI extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(0, 0, 0)
-                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 5, Short.MAX_VALUE))
         );
 
